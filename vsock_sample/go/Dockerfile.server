@@ -6,8 +6,10 @@ COPY . .
 RUN go mod download
 RUN go build
 
-FROM scratch
+FROM alpine
 
 WORKDIR /app
 COPY --from=build /go/src/vsocksample/vsocksample /app/vsocksample
-CMD [ "/app/vsocksample", "server", "-p", "5005" ]
+COPY --from=build /go/src/vsocksample/run.sh /run.sh
+
+CMD [ "/run.sh" ]
